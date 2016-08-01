@@ -5,7 +5,10 @@ Wrapper library for the Pokeapi (http://pokeapi.co/)
 All resources are available via `Pokerap.{{resource_name}}(value)`. `!` versions exist
 for all API resource functions (such as `Pokerap.pokemon("pikachu")` and `Pokerap.pokemon!("pikachu")`)
 
-There is a lot of data in this API, so I wrote some helpers!
+I _highly_ recommend you play around with this in IEX because the amount of data, and how it's organized can
+be overwhelming.
+
+Since there is a lot of data in this API, so I wrote some helpers!
 
 Convenience functions are found under `Pokerap.Ez` (so you can get to the stuff you just want to know)
 
@@ -26,7 +29,7 @@ switching to "ja" or "ja-kanji" to double check before filing an issue.
 
 Also configurable is the timeout for HTTPoison (I found the default resulted in many timeouts)
 ```
-config :pokerap, language: :en
+config :pokerap, language: "en"
 config :pokerap, timeout: 10000
 ```
 
@@ -49,10 +52,9 @@ It's a feature of HTTPoison. You can rekey if you like (https://github.com/edgur
 * Testing. This will require a bunch of "mocking" against HTTPoison, so I'm not really looking forward to it
 * Possibly look into returning structs for some EZ functions. Maybe even a "Pokedex" style struct that matches entries from the games/animes/mangas (If I can remember what those look like)
 * logging
+* better use of multiple language options on resources where it makes sense
 
 ## Installation
-(Not in Hex yet. This is boilerplate)
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
 
   1. Add `pokerap` to your list of dependencies in `mix.exs`:
 
