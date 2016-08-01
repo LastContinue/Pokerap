@@ -11,12 +11,17 @@ defmodule Pokerap.Ez do
     retreive data by pokemone name
   """
   def evolution(name) do
-    {:ok, species} = Pokerap.pokemon_species(name)
-    {:ok, evo} = Pokerap.Url.get_url(species["evolution_chain"]["url"])
-    chain = evo["chain"]
-    # Need to recursively loop over all of the "evolves_to"
-    # there's probably a good way to do this that doesn't involve flatten
-    List.flatten(parse_evo(chain))
+    case Pokerap.pokemon_species(name) do
+      {:ok, species} ->
+      case Pokerap.Url.get_url(species["evolution_chain"]["url"]) do
+        {:error, reason} ->
+          {:error, reason}
+        {:ok, evo} ->
+          List.flatten(parse_evo(evo["chain"]))
+      end
+      {:error, reason} -> {:error, reason}
+    end
+
   end
 
   #cleaner to move this out to its own funtion
@@ -51,6 +56,7 @@ defmodule Pokerap.Ez do
     end)
   end
 
+  #TODO: Maybe expand this to offer images of all varieites and forms
   @doc """
   Gets map of images.
   """
@@ -67,7 +73,7 @@ defmodule Pokerap.Ez do
   end
 
   @doc """
-  Gets pokedex style list of types.
+  Gets pokedex style list of types per pokemon
   """
   def types(name) do
     {:ok, pokemon} = Pokerap.pokemon(name)
@@ -75,17 +81,27 @@ defmodule Pokerap.Ez do
   end
 
   @doc """
-  Gets pokedex style list of types
+  Gets pokedex style list of types per pokemon
   """
   def types!(name) do
     Pokerap.pokemon!(name)["types"]
     |> Enum.map(&(&1["type"]["name"]))
   end
 
+  #TODO: This list can be really long and confusing, so need to find a way to filter it
+  @doc """
+  Returns simple list of ALL moves a Pokemon can have
+  """
   def moves(name) do
     {:ok, pokemon} = Pokerap.pokemon(name)
-    moves = Enum.map(pokemon["moves"], fn(x)-> x["move"]["name"] end)
-    {:ok, moves}
+    {:ok, Enum.map(pokemon["moves"], fn(x)-> x["move"]["name"] end)}
+  end
+
+  @doc """
+  Returns simple list of ALL moves a Pokemon can have
+  """
+  def moves!(name) do
+    Enum.map(Pokerap.pokemon!(name)["moves"], fn(x)-> x["move"]["name"] end)
   end
 
 end
