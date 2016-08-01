@@ -26,9 +26,9 @@ defmodule Pokerap.Mixfile do
   end
 
   defp package do
-    [ name: :pokerap
+    [ name: :pokerap,
       maintainers: ["LastContinue"],
-      licenses: ["Apache 2.0"]
+      licenses: ["Apache 2.0"],
       links: %{"Github" => "https://github.com/lastcontinue/pokerap"}]
   end
 

@@ -54,7 +54,9 @@ It's a feature of HTTPoison. You can rekey if you like (https://github.com/edgur
 * logging
 * better use of multiple language options on resources where it makes sense
 
-## Installation
+<!-- Not ready yet
+
+ ## Installation
 
   1. Add `pokerap` to your list of dependencies in `mix.exs`:
 
@@ -70,4 +72,4 @@ It's a feature of HTTPoison. You can rekey if you like (https://github.com/edgur
     def application do
       [applications: [:pokerap]]
     end
-    ```
+    ``` -->
