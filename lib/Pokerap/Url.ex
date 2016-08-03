@@ -55,4 +55,18 @@ defmodule Pokerap.Url do
   def get_endpoint!(endpoint, value) do
     get_url!(build_url(endpoint,value))
   end
+
+  @doc """
+  Chain more than one function together based on inital results being
+  {:ok, _} , or {:error, _}
+  """
+  def chain_calls(value, initial_fn, following_fn) do
+    case initial_fn.(value) do
+      {:ok, inital_values} ->
+        following_fn.(inital_values)
+      {:error, reason} ->
+        {:error, reason}
+      end
+  end
+
 end
