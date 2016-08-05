@@ -17,18 +17,9 @@ defmodule Pokerap.Ez do
     retreive data by pokemone name
   """
   def evolution(name) do
-    chain_species(name, fn(species) ->
-      case Pokerap.Url.get_url(species["evolution_chain"]["url"]) do
-        {:ok, evo} -> List.flatten(parse_evo(evo["chain"]))
-        {:error, reason} -> {:error, reason}
-        end
-      end)
-  end
-
-  #chain another call after calling pokemon_species providing
-  #that call resturns {:ok, _}
-  defp chain_species(name, fn_x) do
-      Pokerap.Url.chain_calls(name,&Pokerap.pokemon_species/1,fn_x)
+    with {:ok, species} <- Pokerap.pokemon_species(name),
+         {:ok, evo} <- Pokerap.Url.get_url(species["evolution_chain"]["url"]),
+         do: {:ok, List.flatten(parse_evo(evo["chain"]))}
   end
 
   #Parses flavor_texts, filters by language, returns map of "game version" => "text"
@@ -47,10 +38,8 @@ defmodule Pokerap.Ez do
   Gets map of pokedex style descriptions.
   """
   def flavor_text(name) do
-    case chain_species(name, &parse_flavor_text/1) do
-      {:error, reason} -> {:error, reason}
-       flavor_texts -> {:ok, flavor_texts}
-    end
+    with {:ok, species} <- Pokerap.pokemon_species(name),
+         do: {:ok, parse_flavor_text(species)}
   end
 
   @doc """
@@ -65,8 +54,8 @@ defmodule Pokerap.Ez do
   Gets map of images.
   """
   def images(name) do
-    sprites = fn(pokemon) -> pokemon["sprites"] end
-    Pokerap.Url.chain_calls(name,&Pokerap.pokemon/1,sprites)
+    with {:ok, pokemon} <- Pokerap.pokemon(name),
+          do: {:ok, pokemon["sprites"]}
   end
 
   @doc """
@@ -80,10 +69,9 @@ defmodule Pokerap.Ez do
   Gets pokedex style list of types per pokemon
   """
   def types(name) do
-    parse_types = fn(pokemon) ->
-      Enum.map(pokemon["types"], &(&1["type"]["name"]))
-    end
-    Pokerap.Url.chain_calls(name,&Pokerap.pokemon/1,parse_types)
+    with {:ok, pokemon} <- Pokerap.pokemon(name),
+         types <- Enum.map(pokemon["types"], &(&1["type"]["name"])),
+         do: {:ok, types}
   end
 
   @doc """
@@ -99,11 +87,10 @@ defmodule Pokerap.Ez do
   Returns simple list of ALL moves a Pokemon can have
   """
   def moves(name) do
-    parse_moves = fn(pokemon) ->
-      Enum.map(pokemon["moves"], &(&1["move"]["name"]))
-    end
-    Pokerap.Url.chain_calls(name,&Pokerap.pokemon/1,parse_moves)
-  end
+    with {:ok, pokemon} <- Pokerap.pokemon(name),
+         moves <- Enum.map(pokemon["moves"], &(&1["move"]["name"])),
+         do: {:ok, moves}
+   end
 
   @doc """
   Returns simple list of ALL moves a Pokemon can have
