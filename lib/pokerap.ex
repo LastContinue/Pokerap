@@ -33,7 +33,7 @@ defmodule Pokerap do
   {:ok, bidoof} = Pokerap.catch_em(get_bidoof)
 
   """
-  def catch_em(function)do
+  def catch_em(function) do
     case function.() do
       {:ok, result} ->
         {:ok, result}
@@ -44,4 +44,8 @@ defmodule Pokerap do
     end
   end
 
+  def language do
+    env_lang = Application.get_env(:pokerap, :language)
+    if (env_lang), do: env_lang, else: "en"
+  end
 end

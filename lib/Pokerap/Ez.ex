@@ -4,6 +4,7 @@ defmodule Pokerap.Ez do
     "get what I mean" instead of the almost firehose-esk data from the API
 
   """
+  import Pokerap
 
   #cleaner to move this out to its own funtion
   defp parse_evo(chain) do
@@ -25,8 +26,6 @@ defmodule Pokerap.Ez do
   #Parses flavor_texts, filters by language, returns map of "game version" => "text"
   defp parse_flavor_text(flavor_texts) do
     #this does not fee "Elixir-y"
-    env_lang = Application.get_env(:pokerap, :language)
-    language = if (env_lang), do: env_lang, else: "en"
     filter_lang = fn(x) -> x["language"]["name"] == language end
     Enum.filter(flavor_texts["flavor_text_entries"], filter_lang)
     |> Enum.reduce(%{}, fn(entry, acc) ->
