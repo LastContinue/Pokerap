@@ -22,22 +22,22 @@ Elixir wrapper library for the Pokeapi [http://pokeapi.co/](http://pokeapi.co/)
 
 ##Usage
 Every resource under [http://pokeapi.co/docsv2/#resource-lists](http://pokeapi.co/docsv2/#resource-lists) is mapped to the `Pokerap` module with a function that returns a pattern matchable tuple, as well as a ! version that only returns data.
-	
+
 	{:ok, pikachu} = Pokerap.pokemon(:pikachu)
 	pikatwo = Pokerap.pokemon!(:pikachu)
 
 Resources that have a hypen in the name such as `/api/v2/pokemon-species/{id or name}` have been renamed so they are valid Elixir
 
-	Pokerap.pokemon_species(:dragonite)	
+	Pokerap.pokemon_species(:dragonite)
 
 Any function for a resource under [http://pokeapi.co/docsv2/#resource-lists](http://pokeapi.co/docsv2/#resource-lists) that can take `{id or name}` can take strings, atoms or integers.
 
 	{:ok, eevee} = Pokerap.pokemon(:eevee)
 	{:ok, jolteon} = Pokerap.pokemon("jolteon")
 	{:ok, espeon} = Pokerap.pokemon(196)
-	
+
 Any function for a resource under [http://pokeapi.co/docsv2/#resource-lists](http://pokeapi.co/docsv2/#resource-lists) that can **only** take `{id}` can take integers (at the moment. Thinking of doing this so it can take URL's as well. Building guards into this maybe a good idea
-for the future.)	
+for the future.)
 
 	{:ok, eevee_evolution_chain} = Pokerap.evolution_chain(67)
 	{:error, 500} = Pokerap.evolution_chain(:cubone)
@@ -51,13 +51,13 @@ Since there is a lot of data in this API, I wrote some helpers!
 Convenience functions are found under `Pokerap.Ez` (so you can get to the stuff you just want to know)
 
 For example:  
-	
+
 	iex(1)> Pokerap.pokemon!(:abomasnow)["types"]
 	[%{"slot" => 2,
 		"type" => %{"name" => "ice", "url" => "http://pokeapi.co/api/v2/type/15/"}},
  	%{"slot" => 1,
    		"type" => %{"name" => "grass", "url" => "http://pokeapi.co/api/v2/type/12/"}}]
-     	
+
 Would take a bit to parse, however
 
 	iex(2)> Pokerap.Ez.types!(:abomasnow)
@@ -66,7 +66,7 @@ Would take a bit to parse, however
 No problem! (Although maybe a bit too simplified...this may get improved upon)
 
 Lets try another one! What if we want to see how a Pokemon can evolve?
-	
+
 	iex(1)> Pokerap.pokemon_species!(:pikachu)["evolution_chain"]
 	%{"url" => "http://pokeapi.co/api/v2/evolution-chain/10/"}
 	iex(2)> Pokerap.evolution_chain(10)
@@ -108,16 +108,16 @@ Lets try another one! What if we want to see how a Pokemon can evolve?
 Whoa! Pretty chewy. The Thunderstone adds a bit, but still something to sift through. (Try Eevee!)
 
 Lets do this instead  
-	
+
 	iex(5)> Pokerap.Ez.evolution(:pikachu)
-	["pichu", "pikachu", "raichu"]	
-	
-That's better! 
+	["pichu", "pikachu", "raichu"]
+
+That's better!
 
 `/lib/Pokerap.Ez.ex` is pretty short, so you can browse through there to see what all you can do.
 
 **Try 'em all!**			
-###ENV settings:
+### ENV settings:
 
 You can set the default language (currently "en") for flavor texts.  
 See [http://pokeapi.co/api/v2/language/](http://pokeapi.co/api/v2/language/) for full list.
@@ -127,19 +127,12 @@ all languages, so if you're getting `{:ok, %{}}` for every Pokemon, you might tr
 switching to "ja" or "ja-kanji" to double check before filing an issue.
 
 Also configurable is the timeout for HTTPoison (I found the default resulted in many timeouts)  
-	
+
 	config :pokerap, language: "en"  
-	config :pokerap, timeout: 10000  
-	
+	config :pokerap, timeout: 10000
+    config :pokerap, recv_timeout: 20000  
+
 ### Anticipated Questions:
-**"I'm still getting a bunch of timeouts!"**  
-There's a toy function I wrote ( `Pokerap.catch_em\1` ) that will try to run your request
-until it get something back.  
-This is something you shouldn't use all the time, but can be useful for debugging  
-
-	get_bidoof = fn -> Pokerap.pokemon(:bidoof) end  
-	{:ok, bidoof} = Pokerap.catch_em(get_bidoof)
-
 
 **"Hey, how come all of the map keys are strings, and not atoms! That's not very Elixir-y!"**
 
@@ -152,5 +145,3 @@ It's a feature of HTTPoison. You can rekey if you like (https://github.com/edgur
 * Possibly look into returning structs for some EZ functions. Maybe even a "Pokedex" style struct that matches entries from the games/animes/mangas (If I can remember what those look like)
 * logging
 * better use of multiple language options on resources where it makes sense
-
-

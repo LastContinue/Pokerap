@@ -31,3 +31,4 @@ use Mix.Config
 
 #config :pokerap, language: "en"
 config :pokerap, timeout: 10000
+config :pokerap, recv_timeout: 20000

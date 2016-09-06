@@ -5,7 +5,8 @@ defmodule Pokerap.Url do
 
   defp httpoison_get() do
     timeout = Application.get_env(:pokerap, :timeout)
-    fn(url) -> HTTPoison.get(url,[],[timeout: timeout]) end
+    recv_timeout = Application.get_env(:pokerap, :recv_timeout) 
+    fn(url) -> HTTPoison.get(url,[],[timeout: timeout, recv_timeout: recv_timeout]) end
   end
 
   # Calls HTTPoison to actually get resources from API
