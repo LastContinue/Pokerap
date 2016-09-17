@@ -20,30 +20,6 @@ defmodule Pokerap do
                   "pokemon_habitat", "pokemon_shape", "pokemon_species", "stat",
                   "type", "language"]
 
-  @doc """
-  Repeatedly calls Pokeapi until it gets results! 頑張って!
-
-  Pokeapi can still timeout despite fiddling with the timeout ENV var.
-  This will keep trying until SOMETHING happens.
-
-  Please don't use this in anything serious
-
-  ##Example
-  get_bidoof = fn -> Pokerap.pokemon(:bidoof) end
-  {:ok, bidoof} = Pokerap.catch_em(get_bidoof)
-
-  """
-  def catch_em(function) do
-    case function.() do
-      {:ok, result} ->
-        {:ok, result}
-      {:error, :timeout} ->
-        catch_em(function)
-      {:error, error} ->
-        {:error, error}
-    end
-  end
-
   def language do
     env_lang = Application.get_env(:pokerap, :language)
     if (env_lang), do: env_lang, else: "en"
