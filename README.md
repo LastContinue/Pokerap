@@ -20,7 +20,7 @@ Elixir wrapper library for the Pokeapi [http://pokeapi.co/](http://pokeapi.co/)
     end
     ```
 
-##Usage
+## Usage
 Every resource under [http://pokeapi.co/docsv2/#resource-lists](http://pokeapi.co/docsv2/#resource-lists) is mapped to the `Pokerap` module with a function that returns a pattern matchable tuple, as well as a ! version that only returns data.
 
 	{:ok, pikachu} = Pokerap.pokemon(:pikachu)
@@ -45,7 +45,7 @@ for the future.)
 I _highly_ recommend you play around with this in IEX because the amount of data, and how it's organized, can
 be overwhelming.
 
-####Convenience functions
+### Convenience functions
 Since there is a lot of data in this API, I wrote some helpers!
 
 Convenience functions are found under `Pokerap.Ez` (so you can get to the stuff you just want to know)
@@ -110,38 +110,41 @@ Whoa! Pretty chewy. The Thunderstone adds a bit, but still something to sift thr
 Lets do this instead  
 
 	iex(5)> Pokerap.Ez.evolution(:pikachu)
-	["pichu", "pikachu", "raichu"]
+	{:ok, ["pichu", "pikachu", "raichu"]}
 
 That's better!
 
 `/lib/Pokerap.Ez.ex` is pretty short, so you can browse through there to see what all you can do.
 
 **Try 'em all!**			
-### ENV settings:
+## ENV settings
+(All of these have defaults so they are **optional**)
+
+	config :pokerap, language: "es" #defaults to "en"  
+	config :pokerap, timeout: 10000 #defaults 8000
+    config :pokerap, recv_timeout: 20000  #defaults to 5000
 
 You can set the default language (currently "en") for flavor texts.  
-See [http://pokeapi.co/api/v2/language/](http://pokeapi.co/api/v2/language/) for full list.
+
+See [http://pokeapi.co/api/v2/language/](http://pokeapi.co/api/v2/language/) for full list of supported languages.
 
 Be advised that not all flavor texts have listings for
 all languages, so if you're getting `{:ok, %{}}` for every Pokemon, you might try
 switching to "ja" or "ja-kanji" to double check before filing an issue.
 
-Also configurable is the timeout for HTTPoison (I found the default resulted in many timeouts)  
+Also configurable is the timeout for HTTPoison. I found the default resulted in many timeouts. See [https://hexdocs.pm/httpoison/HTTPoison.html#request/5](https://hexdocs.pm/httpoison/HTTPoison.html#request/5) for default values and ideas for possible future features.  
 
-	config :pokerap, language: "en"  
-	config :pokerap, timeout: 10000
-    config :pokerap, recv_timeout: 20000  
 
 ### Anticipated Questions:
 
 **"Hey, how come all of the map keys are strings, and not atoms! That's not very Elixir-y!"**
 
-It's a feature of HTTPoison. You can rekey if you like (https://github.com/edgurgel/httpoison#wrapping-httpoisonbase)
+It's a feature of HTTPoison. You can rekey if you like [https://github.com/edgurgel/httpoison#wrapping-httpoisonbase](https://github.com/edgurgel/httpoison#wrapping-httpoisonbase)
 
 ### What's next?
 * Documentation. I feel what is currently in place is the bare minimum
 * Examples
 * Testing. This will require a bunch of mocking against HTTPoison, so I'm not really looking forward to it
-* Possibly look into returning structs for some EZ functions. Maybe even a "Pokedex" style struct that matches entries from the games/animes/mangas (If I can remember what those look like)
+* Possibly look into returning structs for some EZ functions. Maybe even a "Pokedex" style struct that matches entries from the games/anime/manga (If I can remember what those look like)
 * logging
 * better use of multiple language options on resources where it makes sense
