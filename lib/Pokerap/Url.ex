@@ -14,7 +14,15 @@ defmodule Pokerap.Url do
     fn(url) -> HTTPoison.get(url, [], timeouts.(timeout,recv_timeout)) end
   end
 
-  # Calls HTTPoison to actually get resources from API
+  @doc """
+  Makes call to Httpoision and wraps results in tuple.
+
+  Make sure `url` has a trailing slash.
+
+  This is an intermediary step in `Pokerap.Url.get_endpoint/2`, and only
+  meant to be used when you can _only_ get a full Url (such as `evolution-chain`
+  url from `pokemon-species`) See `Pokerap.Url.get_endpoint/2` for full details.
+  """
   def get_url(url) do
     case httpoison_get.(url) do
       {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
@@ -26,7 +34,16 @@ defmodule Pokerap.Url do
     end
   end
 
-  # Calls HTTPoison to actually get resources from API, ! version
+  @doc """
+  Makes call to Httpoision and returns results.
+
+  Make sure `url` has a trailing slash. Raises exeptions upon error. ! version
+  of `Pokerap.Url.get_url`.
+
+  This is an intermediary step in `Pokerap.Url.get_endpoint!/2`, and only
+  meant to be used when you can _only_ get a full Url (such as `evolution-chain`
+  url from `pokemon-species`) See `Pokerap.Url.get_endpoint!/2` for full details.
+  """
   def get_url!(url) do
     case httpoison_get.(url) do
       {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
@@ -49,14 +66,69 @@ defmodule Pokerap.Url do
   end
 
   @doc """
-  Gets data from remote using endpoint name and value to query.
+  Calls HTTPoison after assembling URL to get resources from API. Returns tuple of request status,
+  and data arranged in different ways depending on endpoint.
+
+  Takes endpoint and value, constructs URL, then makes HTTPoison request.
+
+  ## Example
+  ```
+  iex(1)> Pokerap.Url.get_endpoint("berry","cheri")
+  {:ok, %{"firmness" => %{"name" => "soft",
+  "url" => "http://pokeapi.co/api/v2/berry-firmness/2/"},
+  "flavors" => [%{"flavor" => %{"name" => "spicy",
+  "url" => "http://pokeapi.co/api/v2/berry-flavor/1/"}, "potency" => 10},
+  %{"flavor" => %{"name" => "dry",
+  "url" => "http://pokeapi.co/api/v2/berry-flavor/2/"}, "potency" => 0},
+  %{"flavor" => %{"name" => "sweet",
+  "url" => "http://pokeapi.co/api/v2/berry-flavor/3/"}, "potency" => 0},
+  %{"flavor" => %{"name" => "bitter",
+  "url" => "http://pokeapi.co/api/v2/berry-flavor/4/"}, "potency" => 0},
+  %{"flavor" => %{"name" => "sour",
+  "url" => "http://pokeapi.co/api/v2/berry-flavor/5/"}, "potency" => 0}],
+  "growth_time" => 3, "id" => 1,
+  "item" => %{"name" => "cheri-berry",
+  "url" => "http://pokeapi.co/api/v2/item/126/"}, "max_harvest" => 5,
+  "name" => "cheri", "natural_gift_power" => 60,
+  "natural_gift_type" => %{"name" => "fire",
+  "url" => "http://pokeapi.co/api/v2/type/10/"}, "size" => 20,
+  "smoothness" => 25, "soil_dryness" => 15}}
+  ```
   """
   def get_endpoint(endpoint, value) do
     get_url(build_url(endpoint,value))
   end
 
   @doc """
-  Gets data from remote using endpoint name and value to query.
+  Calls HTTPoison after assembling URL get resources from API. Returns data arranged in different ways depending on endpoint.
+
+  Takes endpoint and value, constructs URL, then makes HTTPoison request.
+
+  Raises exceptions upon error. `!` version of `Pokerap.Url.get_endpoint/1`
+
+  ## Example
+  ```
+  iex(1)> Pokerap.Url.get_endpoint!("berry","cheri")
+  %{"firmness" => %{"name" => "soft",
+  "url" => "http://pokeapi.co/api/v2/berry-firmness/2/"},
+  "flavors" => [%{"flavor" => %{"name" => "spicy",
+  "url" => "http://pokeapi.co/api/v2/berry-flavor/1/"}, "potency" => 10},
+  %{"flavor" => %{"name" => "dry",
+  "url" => "http://pokeapi.co/api/v2/berry-flavor/2/"}, "potency" => 0},
+  %{"flavor" => %{"name" => "sweet",
+  "url" => "http://pokeapi.co/api/v2/berry-flavor/3/"}, "potency" => 0},
+  %{"flavor" => %{"name" => "bitter",
+  "url" => "http://pokeapi.co/api/v2/berry-flavor/4/"}, "potency" => 0},
+  %{"flavor" => %{"name" => "sour",
+  "url" => "http://pokeapi.co/api/v2/berry-flavor/5/"}, "potency" => 0}],
+  "growth_time" => 3, "id" => 1,
+  "item" => %{"name" => "cheri-berry",
+  "url" => "http://pokeapi.co/api/v2/item/126/"}, "max_harvest" => 5,
+  "name" => "cheri", "natural_gift_power" => 60,
+  "natural_gift_type" => %{"name" => "fire",
+  "url" => "http://pokeapi.co/api/v2/type/10/"}, "size" => 20,
+  "smoothness" => 25, "soil_dryness" => 15}
+  ```
   """
   def get_endpoint!(endpoint, value) do
     get_url!(build_url(endpoint,value))
