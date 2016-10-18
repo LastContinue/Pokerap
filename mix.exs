@@ -7,7 +7,7 @@ defmodule Pokerap.Mixfile do
 
   def project do
     [app: :pokerap,
-     version: "0.0.10",
+     version: "0.0.11",
      elixir: "~> 1.3",
      description: @description,
      package: package(),
@@ -19,7 +19,8 @@ defmodule Pokerap.Mixfile do
      name: "Pokerap",
      source_url: "https://github.com/lastcontinue/pokerap",
      homepage_url: "https://github.com/lastcontinue/pokerap",
-     docs: [extras: ["README.md"]]]
+     docs: [ main: "readme",
+       extras: ["README.md"]]]
   end
 
   def application do
@@ -27,8 +28,8 @@ defmodule Pokerap.Mixfile do
   end
 
   defp deps do
-    [{:httpoison, "~> 0.8.0"},
-     {:poison, "~> 2.0"},
+    [{:httpoison, "~> 0.9.0"},
+     {:poison, "~> 3.0"},
      {:ex_doc, "~> 0.14", only: :dev}]
   end
 
