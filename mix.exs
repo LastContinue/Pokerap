@@ -19,7 +19,7 @@ defmodule Pokerap.Mixfile do
      name: "Pokerap",
      source_url: "https://github.com/lastcontinue/pokerap",
      homepage_url: "https://github.com/lastcontinue/pokerap",
-     docs: [main: "Readme",
+     docs: [main: "readme",
             extras: ["README.md"]]]
   end
 
