@@ -10,7 +10,7 @@ Elixir wrapper library for the Pokeapi [http://pokeapi.co/](http://pokeapi.co/)
 
     ```elixir
     def deps do
-      [{:pokerap, git: "https://github.com/lastcontinue/pokerap.git", branch: "master"}]
+      [{:pokerap, "~> 0.0.9"}]
     end
     ```
 
