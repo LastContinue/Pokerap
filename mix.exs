@@ -2,12 +2,12 @@ defmodule Pokerap.Mixfile do
   use Mix.Project
 
   @description """
-  Wrapper library for the Pokeapi (http://pokeapi.co/)
+  Wrapper library for the Pokeapi [http://pokeapi.co](http://pokeapi.co/)
   """
 
   def project do
     [app: :pokerap,
-     version: "0.0.9",
+     version: "0.0.10",
      elixir: "~> 1.3",
      description: @description,
      package: package(),
@@ -19,8 +19,7 @@ defmodule Pokerap.Mixfile do
      name: "Pokerap",
      source_url: "https://github.com/lastcontinue/pokerap",
      homepage_url: "https://github.com/lastcontinue/pokerap",
-     docs: [main: "Readme",
-            extras: ["README.md"]]]
+     docs: [extras: ["README.md"]]]
   end
 
   def application do
@@ -36,7 +35,7 @@ defmodule Pokerap.Mixfile do
   defp package do
     [ name: :pokerap,
       maintainers: ["LastContinue"],
-      licenses: ["Apache 2.0"],
+      licenses: ["MIT"],
       links: %{"Github" => "https://github.com/lastcontinue/pokerap"}]
   end
 
