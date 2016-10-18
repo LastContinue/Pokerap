@@ -3,15 +3,21 @@ defmodule Pokerap.Url do
   Holds utility functions to actually make HTTP calls
   """
 
-  defp httpoison_get() do
-    timeout = String.to_integer(Application.get_env(:pokerap, :timeout))
-    recv_timeout = String.to_integer(Application.get_env(:pokerap, :recv_timeout))
+  #Builds option array (currently only timeouts) for HTTPoison
+  defp get_options() do
+    timeout = Application.get_env(:pokerap, :timeout)
+    recv_timeout = Application.get_env(:pokerap, :recv_timeout)
+    #pattern matching makes this easier than ye-olde mega-"if/else" loop
     timeouts = fn
-      (timeout, nil) -> [timeout: timeout]
-      (nil, recv_timeout) -> [recv_timeout: recv_timeout]
-      (timeout, recv_timeout) -> [timeout: timeout, recv_timeout: recv_timeout]
+      (nil, nil) -> []
+      (timeout, nil) -> [timeout: String.to_integer(timeout)]
+      (nil, recv_timeout) -> [recv_timeout: String.to_integer(recv_timeout)]
+      (timeout, recv_timeout) -> [
+        timeout: String.to_integer(timeout),
+        recv_timeout: String.to_integer(recv_timeout)
+      ]
     end
-    fn(url) -> HTTPoison.get(url, [], timeouts.(timeout,recv_timeout)) end
+    timeouts.(timeout, recv_timeout)
   end
 
   @doc """
@@ -24,7 +30,7 @@ defmodule Pokerap.Url do
   url from `pokemon-species`) See `Pokerap.Url.get_endpoint/2` for full details.
   """
   def get_url(url) do
-    case httpoison_get.(url) do
+    case HTTPoison.get(url, [], get_options) do
       {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
         {:ok, Poison.decode!(body)}
       {:ok, %HTTPoison.Response{status_code: status_code}} ->
@@ -45,13 +51,11 @@ defmodule Pokerap.Url do
   url from `pokemon-species`) See `Pokerap.Url.get_endpoint!/2` for full details.
   """
   def get_url!(url) do
-    case httpoison_get.(url) do
-      {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
-        Poison.decode!(body)
-      {:ok, %HTTPoison.Response{status_code: status_code}} ->
-        raise status_code
-      {:error, %HTTPoison.Error{reason: reason}} ->
-        raise reason
+    case get_url(url) do
+      {:ok, body} -> body
+      {:error, status_code} when is_integer(status_code) ->
+        raise Integer.to_string(status_code)
+      {_, error} -> raise error
     end
   end
 
