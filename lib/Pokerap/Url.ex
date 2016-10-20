@@ -3,21 +3,11 @@ defmodule Pokerap.Url do
   Holds utility functions to actually make HTTP calls
   """
 
+  alias Pokerap.Env, as: Env
+
   #Builds option array (currently only timeouts) for HTTPoison
   defp get_options() do
-    timeout = Application.get_env(:pokerap, :timeout)
-    recv_timeout = Application.get_env(:pokerap, :recv_timeout)
-    #pattern matching makes this easier than ye-olde mega-"if/else" loop
-    timeouts = fn
-      (nil, nil) -> []
-      (timeout, nil) -> [timeout: String.to_integer(timeout)]
-      (nil, recv_timeout) -> [recv_timeout: String.to_integer(recv_timeout)]
-      (timeout, recv_timeout) -> [
-        timeout: String.to_integer(timeout),
-        recv_timeout: String.to_integer(recv_timeout)
-      ]
-    end
-    timeouts.(timeout, recv_timeout)
+    [timeout: Env.timeout, recv_timeout: Env.recv_timeout]
   end
 
   @doc """

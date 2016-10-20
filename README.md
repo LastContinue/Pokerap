@@ -4,6 +4,8 @@
 
 Elixir wrapper library for the Pokeapi [http://pokeapi.co/](http://pokeapi.co/)
 
+[Hex Docs](https://hexdocs.pm/pokerap/readme.html)
+
 ## Installation
 
   1. Add `pokerap` to your list of dependencies in `mix.exs`:
@@ -119,14 +121,22 @@ That's better!
 `/lib/Pokerap.Ez.ex` is pretty short, so you can browse through there to see what all you can do.
 
 **Try 'em all!**
-## ENV settings
-(All of these have defaults so they are **optional**)
+## ENV/Config Settings
+All of these have defaults so they are **optional**.
 
-	config :pokerap, language: "es" #defaults to "en"
-	config :pokerap, timeout: 10000 #defaults 8000
-    config :pokerap, recv_timeout: 20000  #defaults to 5000
+|  Env  | Desc | Format | Default
+|--------|------|--------|--------|
+|`:pokerap, :timeout`|timeout to send request(?) | integer (in milliseconds) | 8000
+|`:pokerap, :recv_timeout`|timeout to receive response | integer (in milliseconds) | 5000
+|`:pokerap, :language`|default language | string | "en"
 
-You can set the default language (currently "en") for flavor texts.
+Can be set such as:
+
+	Application.put_env(:pokerap, language: "es")
+
+or in Config.exs
+
+    config :pokerap, language: "es"
 
 See [http://pokeapi.co/api/v2/language/](http://pokeapi.co/api/v2/language/) for full list of supported languages.
 
@@ -134,8 +144,7 @@ Be advised that not all flavor texts have listings for
 all languages, so if you're getting `{:ok, %{}}` for every Pokemon, you might try
 switching to "ja" or "ja-kanji" to double check before filing an issue.
 
-Also configurable is the timeout for HTTPoison. I found the default resulted in many timeouts. See [https://hexdocs.pm/httpoison/HTTPoison.html#request/5](https://hexdocs.pm/httpoison/HTTPoison.html#request/5) for default values and ideas for possible future features.
-
+Also configurable is the timeout for HTTPoison. I found the default resulted in many timeouts. See [https://hexdocs.pm/httpoison/HTTPoison.html#request/5](https://hexdocs.pm/httpoison/HTTPoison.html#request/5) for source of default values and ideas for possible future features.
 
 ### Anticipated Questions:
 

@@ -21,16 +21,4 @@ defmodule Pokerap do
    "type", "language"]
    |> Pokerap.Macro.make_endpoint_calls
 
-  @doc """
-  gets default language from config. Uses "en" if no default
-  specified
-  """
-  def language do
-    set_default_lang = fn
-      (nil) -> "en"
-      (env_lang) -> env_lang
-    end
-    set_default_lang.(Application.get_env(:pokerap, :language))
-  end
-
 end
