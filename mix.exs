@@ -7,7 +7,7 @@ defmodule Pokerap.Mixfile do
 
   def project do
     [app: :pokerap,
-     version: "0.0.11",
+     version: "0.0.12",
      elixir: "~> 1.3",
      description: @description,
      package: package(),
