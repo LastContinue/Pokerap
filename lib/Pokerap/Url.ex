@@ -20,7 +20,7 @@ defmodule Pokerap.Url do
   url from `pokemon-species`) See `Pokerap.Url.get_endpoint/2` for full details.
   """
   def get_url(url) do
-    case HTTPoison.get(url, [], get_options) do
+    case HTTPoison.get(url, [], get_options()) do
       {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
         {:ok, Poison.decode!(body)}
       {:ok, %HTTPoison.Response{status_code: status_code}} ->

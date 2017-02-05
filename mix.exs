@@ -7,7 +7,7 @@ defmodule Pokerap.Mixfile do
 
   def project do
     [app: :pokerap,
-     version: "0.0.12",
+     version: "0.1.0",
      elixir: "~> 1.3",
      description: @description,
      package: package(),
@@ -28,7 +28,7 @@ defmodule Pokerap.Mixfile do
   end
 
   defp deps do
-    [{:httpoison, "~> 0.9.0"},
+    [{:httpoison, "~> 0.11.0"},
      {:poison, "~> 3.0"},
      {:ex_doc, "~> 0.14", only: :dev}]
   end
