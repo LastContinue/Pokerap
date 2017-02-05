@@ -12,7 +12,7 @@ Elixir wrapper library for the Pokeapi [http://pokeapi.co/](http://pokeapi.co/)
 
     ```elixir
     def deps do
-      [{:pokerap, "~> 0.0.11"}]
+      [{:pokerap, "~> 0.1.0"}]
     end
     ```
 
@@ -151,7 +151,7 @@ or in Config.exs
 
 or if you like ENV settings (how I would do it) you can also do  
 
-    POKERAP_LANGUAGE="en"  
+    POKERAP_LANGUAGE=en  
     POKERAP_TIMEOUT=10000
     POKERAP_RECV_TIMEOUT=8000
 
