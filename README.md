@@ -12,7 +12,7 @@ Elixir wrapper library for the Pokeapi [http://pokeapi.co/](http://pokeapi.co/)
 
     ```elixir
     def deps do
-      [{:pokerap, "~> 0.1.0"}]
+      [{:pokerap, "~> 0.1.1"}]
     end
     ```
 
@@ -135,15 +135,15 @@ Once a Poliwag becomes a Poliwhirl, it can become _either_ a Poliwrath, _or_ a P
 ## ENV/Config Settings
 All of these have defaults so they are **optional**.
 
-|  Env  | Desc | Format | Default
-|--------|------|--------|--------|
-|`:pokerap, :timeout`|timeout to send request(?) | integer (in milliseconds) | 8000
-|`:pokerap, :recv_timeout`|timeout to receive response | integer (in milliseconds) | 5000
-|`:pokerap, :language`|default language | string | "en"
+| Env | Desc | Format | Default |
+|-----|------|--------|---------|
+| `:pokerap, :timeout`  | timeout to send request( I think? )  | integer (in milliseconds)  |  8000 |
+| `:pokerap, :recv_timeout` | timeout to receive response   | integer (in milliseconds)  | 5000  |
+| `:pokerap, :language` | default language  | string  | "en"  |
 
 Can be set such as:
 
-	Application.put_env(:pokerap, language: "es")
+	Application.put_env(:pokerap, :language, "es")
 
 or in Config.exs
 
@@ -159,7 +159,7 @@ In a file (I suggest `.env`) and then make sure you run `source .env` before you
 
 
 See `/lib/Pokerap/Env.ex` for how this works if you're curious. I got the idea from
-[http://blog.danielberkompas.com/elixir/2015/03/21/manage-env-vars-in-elixir.html](http://blog.danielberkompas.com/elixir/2015/03/21/manage-env-vars-in-elixir.html) :beer:
+[http://blog.danielberkompas.com/elixir/2015/03/21/manage-env-vars-in-elixir.html](http://blog.danielberkompas.com/elixir/2015/03/21/manage-env-vars-in-elixir.html) 🍺
 
 ### Language Support
 See [http://pokeapi.co/api/v2/language/](http://pokeapi.co/api/v2/language/) for full list of supported languages.
