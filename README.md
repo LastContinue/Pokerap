@@ -12,7 +12,7 @@ Elixir wrapper library for the Pokeapi [http://pokeapi.co/](http://pokeapi.co/)
 
     ```elixir
     def deps do
-      [{:pokerap, "~> 0.1.0"}]
+      [{:pokerap, "~> 0.1.1"}]
     end
     ```
 
