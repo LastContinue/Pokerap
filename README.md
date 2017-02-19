@@ -12,7 +12,7 @@ Elixir wrapper library for the Pokeapi [http://pokeapi.co/](http://pokeapi.co/)
 
     ```elixir
     def deps do
-      [{:pokerap, "~> 0.0.11"}]
+      [{:pokerap, "~> 0.1.0"}]
     end
     ```
 
@@ -109,14 +109,25 @@ Lets try another one! What if we want to see how a Pokemon can evolve?
 	     "is_baby" => true,
 	     "species" => %{"name" => "pichu",
 	       "url" => "http://pokeapi.co/api/v2/pokemon-species/172/"}}, "id" => 10}}
-Whoa! Pretty chewy. The Thunderstone adds a bit, but still something to sift through. (Try Eevee!)
+Whoa! Pretty chewy. The Thunderstone adds a bit, but still something to sift through.
 
 Lets do this instead
 
-	iex(5)> Pokerap.Ez.evolution(:pikachu)
-	{:ok, ["pichu", "pikachu", "raichu"]}
+    iex(5)> Pokerap.Ez.evolution(:pikachu)
+    {:ok, ["pichu", ["pikachu", ["raichu"]]]}
 
-That's better!
+That's better! You'll notice that each (nested) list is an evolution branch, so Pokemon with branched evolutions can be picked out better.
+
+    iex(2)> Pokerap.Ez.evolution("slowpoke")
+    {:ok, ["slowpoke", ["slowbro"], ["slowking"]]}
+
+Slowpoke can become _either_ Slobro, _or_ Slowking, so you see how the lists are nested here.
+
+And just for good measure:  
+
+    iex(6)> Pokerap.Ez.evolution("poliwag")
+    {:ok, ["poliwag", ["poliwhirl", ["poliwrath"], ["politoed"]]]}    
+Once a Poliwag becomes a Poliwhirl, it can become _either_ a Poliwrath, _or_ a Politoed (well...not in Pokemon Go... yet...), but again, you can see the nesting.
 
 `/lib/Pokerap.Ez.ex` is pretty short, so you can browse through there to see what all you can do.
 
@@ -138,22 +149,38 @@ or in Config.exs
 
     config :pokerap, language: "es"
 
+or if you like ENV settings (how I would do it) you can also do  
+
+    POKERAP_LANGUAGE=en  
+    POKERAP_TIMEOUT=10000
+    POKERAP_RECV_TIMEOUT=8000
+
+In a file (I suggest `.env`) and then make sure you run `source .env` before you start your app (or built it into your login script, or something. Lots of flexibility here.)
+
+
+See `/lib/Pokerap/Env.ex` for how this works if you're curious. I got the idea from
+[http://blog.danielberkompas.com/elixir/2015/03/21/manage-env-vars-in-elixir.html](http://blog.danielberkompas.com/elixir/2015/03/21/manage-env-vars-in-elixir.html) :beer:
+
+### Language Support
 See [http://pokeapi.co/api/v2/language/](http://pokeapi.co/api/v2/language/) for full list of supported languages.
 
 Be advised that not all flavor texts have listings for
 all languages, so if you're getting `{:ok, %{}}` for every Pokemon, you might try
 switching to "ja" or "ja-kanji" to double check before filing an issue.
 
-Also configurable is the timeout for HTTPoison. I found the default resulted in many timeouts. See [https://hexdocs.pm/httpoison/HTTPoison.html#request/5](https://hexdocs.pm/httpoison/HTTPoison.html#request/5) for source of default values and ideas for possible future features.
+## Testing  
 
-### Anticipated Questions:
+Okay, this needs quite a bit of work, **however** , there are doc tests for the `Ez` module that work at an "integration" level with the Pokeapi.co API. This isn't ideal, but you can at least see if you've broken something big while you've been hacking away. Since most of the other methods are done via macro, I did most of my hacking with the `Ez` module, so thusly why I wanted to be able to test at least some aspect of it.
+
+`mix test` will run these. See `config/test.exs` for note about language setting in test.
+
+## Anticipated Questions:
 
 **"Hey, how come all of the map keys are strings, and not atoms! That's not very Elixir-y!"**
 
 It's a feature of HTTPoison. You can rekey if you like [https://github.com/edgurgel/httpoison#wrapping-httpoisonbase](https://github.com/edgurgel/httpoison#wrapping-httpoisonbase)
 
-### What's next?
-* Testing. This will require a bunch of mocking against HTTPoison, so I'm not really looking forward to it
+## What's next?
 * Possibly look into returning structs for some EZ functions. Maybe even a "Pokedex" style struct that matches entries from the games/anime/manga (If I can remember what those look like)
 * logging
 * better use of multiple language options on resources where it makes sense
